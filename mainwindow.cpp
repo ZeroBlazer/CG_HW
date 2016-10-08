@@ -15,7 +15,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-//    ui->openGLWidget->drawPolygon(3, 2);
+    ui->openGLWidget->n1++;
+    ui->openGLWidget->n2++;
 //    ui->openGLWidget->drawLine(0, 0.5, 1, 1.5);
 }
 

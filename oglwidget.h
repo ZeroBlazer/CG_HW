@@ -50,6 +50,13 @@ public:
     void drawLine(float p1_x, float p1_y, float p2_x, float p2_y);
     void fillPolygon(int n, float r);
 
+    int n1,
+        n2;
+    float x1,
+          y1,
+          x2,
+          y2;
+
 protected:
     void initializeGL();
     void resizeGL(int w, int h);

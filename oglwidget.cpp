@@ -1,8 +1,19 @@
 #include "oglwidget.h"
 
 OGLWidget::OGLWidget(QWidget *parent)
-{
+{   
+    cout << "Numero de vertices primer poligono (azul): ";
+    cin >> n1;
+    if(n1 < 2)
+        n1 = 3;
 
+    cout << "Numero de vertices segundo poligono (plomo): ";
+    cin >> n2;
+    if(n2 < 2)
+        n2 = 3;
+
+    cout << "Coordenadas punto (x1, y1, x2, y2): ";
+    cin >> x1 >> y1 >> x2 >> y2;
 }
 
 OGLWidget::~OGLWidget()
@@ -193,9 +204,9 @@ void OGLWidget::paintGL()
 //    glEnd();
 
     drawCircle();
-    drawPolygon(7, 1.01);
-//    drawLine(0, 0.5, 1, 1.5);
-    fillPolygon(7, 1);
+    drawPolygon(n1, 1);
+    drawLine(x1, y1, x2, y2);
+    fillPolygon(n2, 1);
 
 //    Edge A(0, 1, 0.8, 0.2);
 //    GLfloat x;

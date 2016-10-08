@@ -126,11 +126,12 @@ void OGLWidget::fillPolygon(int n, float r)
     glBegin(GL_POINTS);
         bool parity = true;
 
-        for(GLfloat y = pol.y_min; y < pol.y_max; y+=0.001) {
+//        for(GLfloat y = pol.y_min; y < pol.y_max; y+=0.001) {
+        for(GLfloat y = pol.y_max; y > pol.y_min; y-=0.001) {
             GLfloat x;
             vector<GLfloat> int_at_x;
             for(int i = 0; i < n; ++i)
-                if(pol.edges[i].intersectsAt(y, x))
+                if(pol.edges[i].intersectsAt(y, x) && x > pol.x_min && x < pol.x_max)
                     int_at_x.push_back(x);
             int current = 0;
             std::sort(int_at_x.begin(), int_at_x.end());
@@ -193,34 +194,78 @@ void OGLWidget::paintGL()
 //    glEnd();
 
     drawCircle();
-    drawPolygon(5, 1.01);
+    drawPolygon(10, 1.01);
 //    drawLine(0, 0.5, 1, 1.5);
-    fillPolygon(5, 1);
+    fillPolygon(10, 1);
+
+    Edge A(0, 1, 0.8, 0.2);
+    GLfloat x;
+    A.intersectsAt(0.5, x);
+    cout << "x: " << x << endl;
 }
 
-Edge::Edge(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) :
-    x1(x1),
-    y1(y1),
-    x2(x2),
-    y2(y2)
+Edge::Edge(GLfloat _x1, GLfloat _y1, GLfloat _x2, GLfloat _y2)
 {
-    dx = x2 - x1;
-    dy = y2 - y1;
+    x1 = _x1 < _x2 ? _x1 : _x2;
+    y1 = _x1 < _x2 ? _y1 : _y2;
+    x2 = _x1 < _x2 ? _x2 : _x1;
+    y2 = _x1 < _x2 ? _y2 : _y1;
+    dx = _x2 - _x1;
+    dy = _y2 - _y1;
     m = dx / dy;
 }
 
 bool Edge::intersectsAt(GLfloat y, GLfloat &x)
 {
-    if(y > y1 && y < y2) {
-        GLfloat _dy = y - y1;
-        x = _dy * m + (x1 < x2 ? x1 : x2);
-        return true;
-    } else if (y > y2 && y < y1) {
-        GLfloat _dy = y - y2;
-        x = _dy * m + (x1 < x2 ? x1 : x2);
-        return true;
-    } else
-        return false;
+    if(m > 0) {
+        if(y < y1 || y > y2)
+            return false;
+    }
+    else {
+        if(y < y2 || y > y1)
+            return false;
+    }
+
+    GLfloat _dy = y - y1;
+    x = _dy * m + x1;
+    return true;
+
+//    if(y2 > y1) {
+//        if(y > y1 && y < y2) {
+//            GLfloat _dy = y - y1;
+//            x = _dy * m + (x1 < x2 ? x1 : x2);
+//            return true;
+//        } else if (y > y2 && y < y1) {
+//            GLfloat _dy = y - y2;
+//            x = _dy * m + (x1 > x2 ? x2 : x1);
+//            return true;
+//        }
+//    }
+
+//    if(y2 < y1) {
+//        if(y > y1 && y < y2) {
+//            GLfloat _dy = y - y1;
+//            x = _dy * m + (x1 < x2 ? x2 : x1);
+//            return true;
+//        } else if (y > y2 && y < y1) {
+//            GLfloat _dy = y - y2;
+//            x = _dy * m + (x1 < x2 ? x2 : x1);
+//            return true;
+//        }
+//    }
+
+    return false;
+
+//    if(y > y1 && y < y2) {
+//        GLfloat _dy = y - y1;
+//        x = _dy * m + (x1 < x2 ? x1 : x2);
+//        return true;
+//    } else if (y > y2 && y < y1) {
+//        GLfloat _dy = y - y2;
+//        x = _dy * m + (x1 < x2 ? x1 : x2);
+//        return true;
+//    } else
+//        return false;
 }
 
 Polygon::Polygon() :

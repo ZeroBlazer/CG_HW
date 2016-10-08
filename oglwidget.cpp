@@ -124,14 +124,13 @@ void OGLWidget::fillPolygon(int n, float r)
 
     glColor3f(0.3, 0.3, 0.5);
     glBegin(GL_POINTS);
-        bool parity = true;
-
 //        for(GLfloat y = pol.y_min; y < pol.y_max; y+=0.001) {
         for(GLfloat y = pol.y_max; y > pol.y_min; y-=0.001) {
+            bool parity = true;
             GLfloat x;
             vector<GLfloat> int_at_x;
             for(int i = 0; i < n; ++i)
-                if(pol.edges[i].intersectsAt(y, x) && x > pol.x_min && x < pol.x_max)
+                if(pol.edges[i].intersectsAt(y, x))// && x > pol.x_min && x < pol.x_max)
                     int_at_x.push_back(x);
             int current = 0;
             std::sort(int_at_x.begin(), int_at_x.end());
@@ -194,14 +193,14 @@ void OGLWidget::paintGL()
 //    glEnd();
 
     drawCircle();
-    drawPolygon(10, 1.01);
+    drawPolygon(7, 1.01);
 //    drawLine(0, 0.5, 1, 1.5);
-    fillPolygon(10, 1);
+    fillPolygon(7, 1);
 
-    Edge A(0, 1, 0.8, 0.2);
-    GLfloat x;
-    A.intersectsAt(0.5, x);
-    cout << "x: " << x << endl;
+//    Edge A(0, 1, 0.8, 0.2);
+//    GLfloat x;
+//    A.intersectsAt(0.5, x);
+//    cout << "x: " << x << endl;
 }
 
 Edge::Edge(GLfloat _x1, GLfloat _y1, GLfloat _x2, GLfloat _y2)
